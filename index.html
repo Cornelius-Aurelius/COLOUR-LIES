@@ -6,16 +6,16 @@
   <title>Colour Lies</title>
   <style>
     :root {
-      --bg: #0e1726;
-      --panel: rgba(255, 255, 255, 0.08);
-      --panel-strong: rgba(255, 255, 255, 0.14);
-      --text: #f7fbff;
-      --muted: rgba(247, 251, 255, 0.72);
-      --good: #36d399;
-      --bad: #ff5c7a;
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.085);
+      --panel2: rgba(255,255,255,.14);
+      --line: rgba(255,255,255,.18);
+      --text: #f8fbff;
+      --muted: rgba(248,251,255,.72);
+      --green: #35d39a;
+      --red: #ff5f7e;
       --gold: #ffd166;
-      --line: rgba(255, 255, 255, 0.18);
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --shadow: 0 22px 70px rgba(0,0,0,.34);
     }
 
     * {
@@ -23,14 +23,13 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html,
-    body {
+    html, body {
       margin: 0;
       min-height: 100%;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(66, 153, 225, 0.28), transparent 34%),
-        radial-gradient(circle at bottom right, rgba(255, 92, 122, 0.22), transparent 32%),
+        radial-gradient(circle at 15% 8%, rgba(37,99,235,.30), transparent 34%),
+        radial-gradient(circle at 85% 92%, rgba(219,39,119,.24), transparent 34%),
         var(--bg);
       color: var(--text);
       overflow-x: hidden;
@@ -40,13 +39,12 @@
       min-height: 100dvh;
       display: flex;
       justify-content: center;
-      align-items: stretch;
-      padding: 14px;
+      padding: 12px;
     }
 
-    .game-shell {
-      width: min(100%, 980px);
-      min-height: calc(100dvh - 28px);
+    .game {
+      width: min(100%, 1120px);
+      min-height: calc(100dvh - 24px);
       display: grid;
       grid-template-rows: auto auto 1fr auto;
       gap: 12px;
@@ -54,23 +52,23 @@
 
     header {
       display: flex;
-      align-items: center;
+      align-items: end;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .brand h1 {
+    h1 {
       margin: 0;
-      font-size: clamp(1.45rem, 4vw, 2.45rem);
-      letter-spacing: -0.04em;
-      line-height: 1;
+      font-size: clamp(1.7rem, 4.3vw, 3.1rem);
+      letter-spacing: -0.055em;
+      line-height: .9;
     }
 
-    .brand p {
+    .subtitle {
       margin: 7px 0 0;
       color: var(--muted);
-      font-weight: 700;
-      font-size: clamp(0.82rem, 2.4vw, 1rem);
+      font-size: clamp(.86rem, 2.2vw, 1.05rem);
+      font-weight: 850;
     }
 
     .top-actions {
@@ -82,143 +80,145 @@
 
     button {
       border: 0;
-      color: var(--text);
       font: inherit;
-      font-weight: 900;
-      cursor: pointer;
-      border-radius: 18px;
+      font-weight: 950;
+      color: var(--text);
       min-height: 48px;
       padding: 12px 16px;
-      background: var(--panel-strong);
+      border-radius: 17px;
+      background: var(--panel2);
       box-shadow: inset 0 0 0 1px var(--line);
-      transition: transform 120ms ease, background 120ms ease, opacity 120ms ease;
-      user-select: none;
+      cursor: pointer;
       touch-action: manipulation;
+      user-select: none;
+      transition: transform .11s ease, opacity .11s ease, background .11s ease;
     }
 
     button:active {
-      transform: scale(0.96);
+      transform: scale(.96);
     }
 
     button:disabled {
+      opacity: .52;
       cursor: not-allowed;
-      opacity: 0.55;
-      transform: none;
     }
 
     .primary {
       background: linear-gradient(135deg, #2563eb, #7c3aed);
-      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.24);
+      box-shadow: 0 14px 32px rgba(37,99,235,.26);
     }
 
     .danger {
-      background: rgba(255, 92, 122, 0.22);
+      background: rgba(255,95,126,.22);
     }
 
     .scorebar {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(5, minmax(0,1fr));
       gap: 8px;
     }
 
     .stat {
-      background: var(--panel);
       border: 1px solid var(--line);
+      background: var(--panel);
       border-radius: 18px;
-      padding: 10px;
       text-align: center;
+      padding: 10px 8px;
       min-width: 0;
     }
 
     .stat span {
       display: block;
       color: var(--muted);
-      font-size: 0.74rem;
-      font-weight: 800;
+      font-size: .72rem;
+      font-weight: 950;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
     }
 
     .stat strong {
       display: block;
-      font-size: clamp(1.05rem, 3.3vw, 1.65rem);
-      line-height: 1.15;
-      margin-top: 3px;
+      font-size: clamp(1.12rem, 3.2vw, 1.65rem);
+      line-height: 1.08;
+      margin-top: 4px;
     }
 
     main {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
       min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(310px, .75fr);
+      gap: 12px;
+      align-items: stretch;
     }
 
     .arena {
+      min-width: 0;
+      min-height: 430px;
       position: relative;
-      background:
-        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        rgba(255, 255, 255, 0.065);
-      background-size: 38px 38px;
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      min-height: 300px;
       display: grid;
       place-items: center;
-      padding: clamp(16px, 4vw, 32px);
+      padding: clamp(18px, 4vw, 34px);
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px),
+        rgba(255,255,255,.065);
+      background-size: 40px 40px;
     }
 
-    .arena::before {
+    .arena:before {
       content: "";
       position: absolute;
-      inset: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.12);
+      inset: 15px;
+      border: 2px solid rgba(255,255,255,.12);
       border-radius: 24px;
       pointer-events: none;
     }
 
     .mission {
       position: absolute;
-      top: 14px;
+      top: 13px;
       left: 50%;
       transform: translateX(-50%);
-      width: min(calc(100% - 28px), 560px);
+      z-index: 3;
+      width: min(calc(100% - 28px), 640px);
       text-align: center;
-      background: rgba(0, 0, 0, 0.34);
-      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 999px;
       padding: 9px 14px;
-      color: var(--text);
-      font-weight: 950;
-      font-size: clamp(0.86rem, 2.7vw, 1.05rem);
-      z-index: 2;
+      background: rgba(0,0,0,.38);
+      border: 1px solid rgba(255,255,255,.14);
+      color: white;
+      font-size: clamp(.84rem, 2vw, 1.02rem);
+      font-weight: 1000;
       backdrop-filter: blur(8px);
     }
 
     .word-card {
       position: relative;
-      width: min(100%, 640px);
-      min-height: 190px;
+      z-index: 1;
+      width: min(100%, 680px);
+      min-height: clamp(190px, 36vh, 280px);
       display: grid;
       place-items: center;
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.92);
+      padding: 52px clamp(14px, 3vw, 28px) 34px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.94);
       color: #101828;
       box-shadow:
-        0 22px 60px rgba(0, 0, 0, 0.26),
-        inset 0 0 0 2px rgba(0, 0, 0, 0.07);
-      padding: 48px 16px 28px;
+        0 22px 60px rgba(0,0,0,.25),
+        inset 0 0 0 2px rgba(0,0,0,.065);
+      overflow: hidden;
     }
 
-    .round-timer {
+    .timer {
       position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 54px;
-      height: 54px;
+      top: 13px;
+      right: 13px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       display: grid;
       place-items: center;
@@ -226,126 +226,146 @@
       color: white;
       font-size: 1.25rem;
       font-weight: 1000;
-      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.25);
+      box-shadow: 0 9px 24px rgba(16,24,40,.24);
     }
 
     .word {
-      font-size: clamp(4.1rem, 16vw, 9.7rem);
-      line-height: 0.92;
-      font-weight: 1000;
-      letter-spacing: -0.075em;
-      text-transform: uppercase;
+      width: 100%;
       text-align: center;
-      filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.08));
+      text-transform: uppercase;
+      font-size: clamp(3rem, 9.2vw, 7.6rem);
+      line-height: .9;
+      letter-spacing: -0.055em;
+      font-weight: 1000;
+      white-space: nowrap;
+      transform-origin: center;
+      filter: drop-shadow(0 8px 0 rgba(0,0,0,.08));
     }
 
-    .micro-help {
+    .small-word {
+      font-size: clamp(2.65rem, 8.1vw, 6.35rem);
+      letter-spacing: -0.045em;
+    }
+
+    .micro {
       position: absolute;
-      bottom: 14px;
       left: 14px;
       right: 14px;
-      color: rgba(16, 24, 40, 0.74);
-      font-weight: 900;
-      font-size: clamp(0.78rem, 2.3vw, 0.95rem);
+      bottom: 12px;
       text-align: center;
+      color: rgba(16,24,40,.74);
+      font-weight: 950;
+      font-size: clamp(.78rem, 2vw, .95rem);
+    }
+
+    .side {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 12px;
     }
 
     .answers {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 10px;
+      align-content: center;
     }
 
-    .answer-btn {
-      min-height: clamp(62px, 13vw, 86px);
-      font-size: clamp(1.05rem, 4vw, 1.6rem);
+    .answer {
+      min-width: 0;
+      min-height: clamp(66px, 9vw, 88px);
       border-radius: 22px;
-      background: rgba(255, 255, 255, 0.1);
+      font-size: clamp(1rem, 2.4vw, 1.45rem);
+      background: rgba(255,255,255,.105);
       border: 1px solid var(--line);
       position: relative;
       overflow: hidden;
+      text-transform: uppercase;
     }
 
-    .answer-btn::after {
+    .answer:after {
       content: "";
       position: absolute;
-      inset: auto 12px 10px 12px;
+      left: 12px;
+      right: 12px;
+      bottom: 9px;
       height: 5px;
-      border-radius: 99px;
+      border-radius: 999px;
       background: currentColor;
-      opacity: 0.62;
+      opacity: .68;
     }
 
-    .answer-btn.correct-flash {
-      background: rgba(54, 211, 153, 0.28);
-      box-shadow: 0 0 0 3px rgba(54, 211, 153, 0.55);
+    .answer.correct-flash {
+      background: rgba(53,211,154,.27);
+      box-shadow: 0 0 0 3px rgba(53,211,154,.52);
     }
 
-    .answer-btn.wrong-flash {
-      background: rgba(255, 92, 122, 0.28);
-      box-shadow: 0 0 0 3px rgba(255, 92, 122, 0.5);
+    .answer.wrong-flash {
+      background: rgba(255,95,126,.27);
+      box-shadow: 0 0 0 3px rgba(255,95,126,.48);
     }
 
     .feedback {
-      min-height: 46px;
+      min-height: 50px;
       border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
       display: grid;
       place-items: center;
       text-align: center;
       padding: 10px 14px;
-      font-size: clamp(0.92rem, 2.8vw, 1.1rem);
+      font-size: clamp(.92rem, 2.2vw, 1.08rem);
       font-weight: 1000;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--line);
     }
 
     .feedback.good {
-      background: rgba(54, 211, 153, 0.18);
-      border-color: rgba(54, 211, 153, 0.44);
-      color: #b6ffe3;
+      background: rgba(53,211,154,.18);
+      border-color: rgba(53,211,154,.44);
+      color: #bcffe7;
     }
 
     .feedback.bad {
-      background: rgba(255, 92, 122, 0.18);
-      border-color: rgba(255, 92, 122, 0.42);
-      color: #ffd1da;
+      background: rgba(255,95,126,.18);
+      border-color: rgba(255,95,126,.44);
+      color: #ffd0da;
     }
 
     .overlay {
       position: absolute;
       inset: 0;
+      z-index: 10;
       display: grid;
       place-items: center;
       padding: 16px;
-      background: rgba(14, 23, 38, 0.78);
+      background: rgba(11,18,32,.78);
       backdrop-filter: blur(10px);
-      z-index: 10;
     }
 
     .modal {
-      width: min(100%, 620px);
-      border-radius: 30px;
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
+      width: min(100%, 640px);
       padding: clamp(20px, 5vw, 34px);
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background: rgba(15,23,42,.96);
+      box-shadow: var(--shadow);
       text-align: center;
     }
 
     .modal h2 {
       margin: 0;
-      font-size: clamp(2rem, 8vw, 4rem);
-      line-height: 0.9;
-      letter-spacing: -0.065em;
+      font-size: clamp(2rem, 8vw, 4.1rem);
+      line-height: .9;
+      letter-spacing: -.07em;
     }
 
     .modal p {
-      color: var(--muted);
-      font-weight: 750;
-      font-size: clamp(0.95rem, 2.8vw, 1.08rem);
-      line-height: 1.45;
+      max-width: 48ch;
       margin: 14px auto 0;
-      max-width: 46ch;
+      color: var(--muted);
+      font-size: clamp(.95rem, 2.8vw, 1.08rem);
+      font-weight: 780;
+      line-height: 1.45;
     }
 
     .rules {
@@ -356,18 +376,18 @@
     }
 
     .rule {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.08);
       border-radius: 18px;
       padding: 11px 13px;
-      font-weight: 850;
-      color: rgba(247, 251, 255, 0.9);
+      color: rgba(248,251,255,.92);
+      font-weight: 900;
     }
 
     .modal-actions {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 10px;
       margin-top: 18px;
     }
@@ -378,30 +398,37 @@
 
     footer {
       text-align: center;
-      color: rgba(247, 251, 255, 0.52);
+      color: rgba(248,251,255,.52);
+      font-size: .77rem;
       font-weight: 1000;
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
+      letter-spacing: .13em;
       text-transform: uppercase;
       padding: 2px 4px 4px;
     }
 
-    @media (min-width: 760px) {
+    @media (max-width: 860px) {
       main {
-        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
-        align-items: stretch;
+        grid-template-columns: 1fr;
       }
 
       .arena {
-        min-height: 520px;
+        min-height: 340px;
+      }
+
+      .side {
+        grid-template-rows: auto auto;
       }
 
       .answers {
-        align-content: center;
+        align-content: stretch;
       }
 
-      .feedback {
-        grid-column: 2;
+      .word {
+        font-size: clamp(2.8rem, 15vw, 6.2rem);
+      }
+
+      .small-word {
+        font-size: clamp(2.45rem, 13vw, 5.3rem);
       }
     }
 
@@ -410,8 +437,9 @@
         padding: 10px;
       }
 
-      .game-shell {
+      .game {
         min-height: calc(100dvh - 20px);
+        gap: 10px;
       }
 
       header {
@@ -422,77 +450,93 @@
         min-height: 42px;
         padding: 10px 12px;
         border-radius: 15px;
-        font-size: 0.86rem;
+        font-size: .86rem;
       }
 
       .scorebar {
         grid-template-columns: repeat(3, 1fr);
       }
 
-      .scorebar .stat:nth-child(4),
-      .scorebar .stat:nth-child(5) {
-        grid-column: span 1;
-      }
-
       .arena {
         min-height: 330px;
         border-radius: 24px;
+        padding: 18px;
       }
 
       .word-card {
         min-height: 205px;
-        padding-top: 54px;
+        padding-top: 55px;
+      }
+
+      .timer {
+        width: 50px;
+        height: 50px;
+        font-size: 1.08rem;
       }
 
       .answers {
-        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .answer {
+        min-height: 62px;
+        border-radius: 18px;
+        font-size: clamp(.92rem, 4vw, 1.2rem);
       }
     }
 
-    @media (max-height: 680px) and (orientation: landscape) {
+    @media (max-height: 700px) and (orientation: landscape) {
       body {
         padding: 8px;
       }
 
-      .game-shell {
+      .game {
         min-height: calc(100dvh - 16px);
         gap: 8px;
       }
 
-      .brand p {
+      .subtitle {
         display: none;
       }
 
-      .scorebar {
-        grid-template-columns: repeat(5, 1fr);
+      .stat {
+        padding: 7px 8px;
+      }
+
+      main {
+        grid-template-columns: minmax(0,1fr) minmax(270px,.72fr);
       }
 
       .arena {
-        min-height: 250px;
+        min-height: 285px;
       }
 
       .word-card {
-        min-height: 150px;
+        min-height: 155px;
       }
 
       .word {
-        font-size: clamp(3rem, 10vw, 6rem);
+        font-size: clamp(2.7rem, 7.4vw, 5.4rem);
       }
 
-      .answer-btn {
-        min-height: 54px;
+      .small-word {
+        font-size: clamp(2.35rem, 6.5vw, 4.7rem);
+      }
+
+      .answer {
+        min-height: 52px;
       }
     }
   </style>
 </head>
-<body>
-  <div class="game-shell">
-    <header>
-      <div class="brand">
-        <h1>Colour Lies</h1>
-        <p>Tap the WORD. Ignore the colour.</p>
-      </div>
 
+<body>
+  <div class="game">
+    <header>
+      <div>
+        <h1>Colour Lies</h1>
+        <p class="subtitle">Tap the WORD. Ignore the colour.</p>
+      </div>
       <div class="top-actions">
         <button id="pauseBtn">Pause</button>
         <button id="restartBtn" class="danger">Restart</button>
@@ -500,26 +544,11 @@
     </header>
 
     <section class="scorebar" aria-label="Score board">
-      <div class="stat">
-        <span>Level</span>
-        <strong id="levelEl">1</strong>
-      </div>
-      <div class="stat">
-        <span>Score</span>
-        <strong id="scoreEl">0</strong>
-      </div>
-      <div class="stat">
-        <span>Streak</span>
-        <strong id="streakEl">0</strong>
-      </div>
-      <div class="stat">
-        <span>Lives</span>
-        <strong id="livesEl">3</strong>
-      </div>
-      <div class="stat">
-        <span>Best</span>
-        <strong id="bestEl">0</strong>
-      </div>
+      <div class="stat"><span>Level</span><strong id="levelEl">1</strong></div>
+      <div class="stat"><span>Score</span><strong id="scoreEl">0</strong></div>
+      <div class="stat"><span>Streak</span><strong id="streakEl">0</strong></div>
+      <div class="stat"><span>Lives</span><strong id="livesEl">3</strong></div>
+      <div class="stat"><span>Best</span><strong id="bestEl">0</strong></div>
     </section>
 
     <main>
@@ -527,19 +556,19 @@
         <div class="mission" id="missionEl">Read the word. Do not trust the colour.</div>
 
         <div class="word-card">
-          <div class="round-timer" id="timerEl">5</div>
+          <div class="timer" id="timerEl">5</div>
           <div class="word" id="wordEl">RED</div>
-          <div class="micro-help">Correct answer = the written word</div>
+          <div class="micro">Correct answer = written word</div>
         </div>
 
         <div class="overlay" id="startOverlay">
           <div class="modal">
             <h2>Colour Lies</h2>
-            <p>The colour will try to trick you. Your job is simple: tap what the WORD says, not the colour you see.</p>
+            <p>The colour will try to trick you. Tap what the WORD says, not the colour you see.</p>
             <div class="rules">
               <div class="rule">1. Read the word.</div>
               <div class="rule">2. Ignore the text colour.</div>
-              <div class="rule">3. Tap the correct word button.</div>
+              <div class="rule">3. Tap the matching word button.</div>
             </div>
             <div class="modal-actions">
               <button class="primary" id="startBtn">Start Game</button>
@@ -550,7 +579,7 @@
         <div class="overlay hidden" id="pauseOverlay">
           <div class="modal">
             <h2>Paused</h2>
-            <p>Remember: the word is the truth. The colour is the trick.</p>
+            <p>The word is the truth. The colour is the trick.</p>
             <div class="modal-actions">
               <button class="primary" id="resumeBtn">Resume</button>
               <button class="danger" id="pauseRestartBtn">Restart</button>
@@ -569,9 +598,10 @@
         </div>
       </section>
 
-      <section class="answers" id="answersEl" aria-label="Answer buttons"></section>
-
-      <div class="feedback" id="feedbackEl">Press Start Game</div>
+      <section class="side">
+        <section class="answers" id="answersEl" aria-label="Answer buttons"></section>
+        <div class="feedback" id="feedbackEl">Press Start Game</div>
+      </section>
     </main>
 
     <footer>MADE BY CORNELIUS AURELIUS</footer>
@@ -597,28 +627,23 @@
       ["BLACK", "BLUE"]
     ];
 
-    const wordEl = document.getElementById("wordEl");
-    const timerEl = document.getElementById("timerEl");
-    const levelEl = document.getElementById("levelEl");
-    const scoreEl = document.getElementById("scoreEl");
-    const streakEl = document.getElementById("streakEl");
-    const livesEl = document.getElementById("livesEl");
-    const bestEl = document.getElementById("bestEl");
-    const missionEl = document.getElementById("missionEl");
-    const feedbackEl = document.getElementById("feedbackEl");
-    const answersEl = document.getElementById("answersEl");
+    const $ = (id) => document.getElementById(id);
 
-    const startOverlay = document.getElementById("startOverlay");
-    const pauseOverlay = document.getElementById("pauseOverlay");
-    const gameOverOverlay = document.getElementById("gameOverOverlay");
-    const finalText = document.getElementById("finalText");
+    const wordEl = $("wordEl");
+    const timerEl = $("timerEl");
+    const levelEl = $("levelEl");
+    const scoreEl = $("scoreEl");
+    const streakEl = $("streakEl");
+    const livesEl = $("livesEl");
+    const bestEl = $("bestEl");
+    const missionEl = $("missionEl");
+    const feedbackEl = $("feedbackEl");
+    const answersEl = $("answersEl");
 
-    const startBtn = document.getElementById("startBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const resumeBtn = document.getElementById("resumeBtn");
-    const restartBtn = document.getElementById("restartBtn");
-    const pauseRestartBtn = document.getElementById("pauseRestartBtn");
-    const playAgainBtn = document.getElementById("playAgainBtn");
+    const startOverlay = $("startOverlay");
+    const pauseOverlay = $("pauseOverlay");
+    const gameOverOverlay = $("gameOverOverlay");
+    const finalText = $("finalText");
 
     let level = 1;
     let score = 0;
@@ -626,7 +651,6 @@
     let lives = 3;
     let best = Number(localStorage.getItem("colourLiesBest") || 0);
     let correctAnswer = "RED";
-    let roundTime = 5;
     let timeLeft = 5;
     let timer = null;
     let running = false;
@@ -634,25 +658,25 @@
 
     bestEl.textContent = best;
 
-    function shuffle(array) {
-      return [...array].sort(() => Math.random() - 0.5);
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
     }
 
-    function pick(array) {
-      return array[Math.floor(Math.random() * array.length)];
+    function pick(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    function getUnlockedColours() {
+    function unlockedColours() {
       if (level < 4) return colours.slice(0, 4);
       if (level < 8) return colours.slice(0, 6);
       return colours;
     }
 
-    function getRoundSeconds() {
-      return Math.max(2.1, 5.2 - level * 0.17);
+    function roundSeconds() {
+      return Math.max(2.8, 6.2 - level * 0.13);
     }
 
-    function getAnswerCount() {
+    function answerCount() {
       if (level < 5) return 2;
       if (level < 11) return 3;
       return 4;
@@ -666,7 +690,14 @@
       bestEl.textContent = best;
     }
 
-    function setFeedback(text, type = "") {
+    function updateBest() {
+      if (score > best) {
+        best = score;
+        localStorage.setItem("colourLiesBest", String(best));
+      }
+    }
+
+    function feedback(text, type = "") {
       feedbackEl.textContent = text;
       feedbackEl.className = "feedback";
       if (type) feedbackEl.classList.add(type);
@@ -675,11 +706,11 @@
     function buildAnswers(options) {
       answersEl.innerHTML = "";
       options.forEach(option => {
-        const colour = colours.find(c => c.name === option) || colours[0];
+        const c = colours.find(x => x.name === option);
         const btn = document.createElement("button");
-        btn.className = "answer-btn";
+        btn.className = "answer";
         btn.textContent = option;
-        btn.style.color = colour.ink;
+        btn.style.color = c ? c.ink : "white";
         btn.setAttribute("aria-label", "Choose " + option);
         btn.addEventListener("click", () => chooseAnswer(option, btn));
         answersEl.appendChild(btn);
@@ -687,38 +718,39 @@
     }
 
     function makeQuestion() {
-      const unlocked = getUnlockedColours();
-      const answerCount = getAnswerCount();
+      const unlocked = unlockedColours();
+      const count = answerCount();
 
       let word = pick(unlocked);
       let ink = pick(unlocked.filter(c => c.name !== word.name));
 
-      if (level >= 5 && Math.random() < 0.62) {
+      if (level >= 5 && Math.random() < 0.65) {
         const pair = pick(trickyPairs);
-        const availablePair = pair
+        const pairColours = pair
           .map(name => colours.find(c => c.name === name))
-          .filter(c => unlocked.some(u => u.name === c.name));
+          .filter(c => c && unlocked.some(u => u.name === c.name));
 
-        if (availablePair.length === 2) {
-          word = pick(availablePair);
-          ink = availablePair.find(c => c.name !== word.name);
+        if (pairColours.length === 2) {
+          word = pick(pairColours);
+          ink = pairColours.find(c => c.name !== word.name);
         }
       }
 
       correctAnswer = word.name;
+
       wordEl.textContent = word.name;
       wordEl.style.color = ink.ink;
+      wordEl.classList.toggle("small-word", word.name.length >= 6);
 
       const wrongs = shuffle(unlocked.filter(c => c.name !== correctAnswer).map(c => c.name))
-        .slice(0, answerCount - 1);
+        .slice(0, count - 1);
 
-      const options = shuffle([correctAnswer, ...wrongs]);
-      buildAnswers(options);
+      buildAnswers(shuffle([correctAnswer, ...wrongs]));
 
       if (level < 5) {
         missionEl.textContent = "Tap the WORD. Ignore the colour.";
-      } else if (level < 10) {
-        missionEl.textContent = "Colour is trying to trick you. Trust the WORD.";
+      } else if (level < 12) {
+        missionEl.textContent = "Colour is lying. Trust the WORD.";
       } else {
         missionEl.textContent = "Fast decision: WORD only.";
       }
@@ -726,12 +758,12 @@
 
     function startTimer() {
       clearInterval(timer);
-      roundTime = getRoundSeconds();
-      timeLeft = roundTime;
+      timeLeft = roundSeconds();
       timerEl.textContent = Math.ceil(timeLeft);
 
       timer = setInterval(() => {
         if (!running) return;
+
         timeLeft -= 0.1;
         timerEl.textContent = Math.max(0, Math.ceil(timeLeft));
 
@@ -749,38 +781,39 @@
       startTimer();
     }
 
-    function chooseAnswer(answer, button) {
+    function chooseAnswer(answer, btn) {
       if (!running || locked) return;
+
       locked = true;
       clearInterval(timer);
 
-      const buttons = [...document.querySelectorAll(".answer-btn")];
+      const buttons = [...document.querySelectorAll(".answer")];
 
       if (answer === correctAnswer) {
         score += 10 + Math.min(streak, 10);
         streak += 1;
+        level += 1;
 
-        if (streak > 0 && streak % 4 === 0) {
-          level += 1;
-        }
+        btn.classList.add("correct-flash");
+        feedback("Correct. You trusted the WORD.", "good");
 
-        button.classList.add("correct-flash");
-        setFeedback("Correct. You trusted the WORD.", "good");
+        updateBest();
+        updateStats();
 
-        setTimeout(() => {
-          level += 1;
-          nextRound();
-        }, 360);
+        setTimeout(nextRound, 360);
       } else {
         lives -= 1;
         streak = 0;
-        button.classList.add("wrong-flash");
 
-        buttons.forEach(btn => {
-          if (btn.textContent === correctAnswer) btn.classList.add("correct-flash");
+        btn.classList.add("wrong-flash");
+        buttons.forEach(b => {
+          if (b.textContent === correctAnswer) b.classList.add("correct-flash");
         });
 
-        setFeedback("Wrong. The colour tricked you.", "bad");
+        feedback("Wrong. The colour tricked you.", "bad");
+
+        updateBest();
+        updateStats();
 
         if (lives <= 0) {
           setTimeout(endGame, 650);
@@ -788,35 +821,26 @@
           setTimeout(nextRound, 650);
         }
       }
-
-      updateBest();
-      updateStats();
     }
 
     function timeoutRound() {
       if (!running || locked) return;
+
       locked = true;
       lives -= 1;
       streak = 0;
 
-      [...document.querySelectorAll(".answer-btn")].forEach(btn => {
-        if (btn.textContent === correctAnswer) btn.classList.add("correct-flash");
+      [...document.querySelectorAll(".answer")].forEach(b => {
+        if (b.textContent === correctAnswer) b.classList.add("correct-flash");
       });
 
-      setFeedback("Too slow. Decide faster.", "bad");
+      feedback("Too slow. Decide faster.", "bad");
       updateStats();
 
       if (lives <= 0) {
         setTimeout(endGame, 650);
       } else {
         setTimeout(nextRound, 650);
-      }
-    }
-
-    function updateBest() {
-      if (score > best) {
-        best = score;
-        localStorage.setItem("colourLiesBest", String(best));
       }
     }
 
@@ -827,10 +851,12 @@
       lives = 3;
       running = true;
       locked = false;
+
       startOverlay.classList.add("hidden");
       pauseOverlay.classList.add("hidden");
       gameOverOverlay.classList.add("hidden");
-      setFeedback("Read the word. Ignore the colour.");
+
+      feedback("Read the word. Ignore the colour.");
       nextRound();
     }
 
@@ -838,47 +864,43 @@
       if (!running) return;
       running = false;
       pauseOverlay.classList.remove("hidden");
-      setFeedback("Paused");
+      feedback("Paused");
     }
 
     function resumeGame() {
-      running = true;
-      pauseOverlay.classList.add("hidden");
-      setFeedback("Read the word. Ignore the colour.");
+      if (gameOverOverlay.classList.contains("hidden")) {
+        running = true;
+        pauseOverlay.classList.add("hidden");
+        feedback("Read the word. Ignore the colour.");
+      }
     }
 
     function endGame() {
       running = false;
       clearInterval(timer);
       updateBest();
+      updateStats();
       finalText.textContent = "Score: " + score + " | Best: " + best;
       gameOverOverlay.classList.remove("hidden");
-      setFeedback("Game Over");
-      updateStats();
+      feedback("Game Over");
     }
 
-    startBtn.addEventListener("click", startGame);
-    playAgainBtn.addEventListener("click", startGame);
-    restartBtn.addEventListener("click", startGame);
-    pauseRestartBtn.addEventListener("click", startGame);
-    pauseBtn.addEventListener("click", pauseGame);
-    resumeBtn.addEventListener("click", resumeGame);
+    $("startBtn").addEventListener("click", startGame);
+    $("playAgainBtn").addEventListener("click", startGame);
+    $("restartBtn").addEventListener("click", startGame);
+    $("pauseRestartBtn").addEventListener("click", startGame);
+    $("pauseBtn").addEventListener("click", pauseGame);
+    $("resumeBtn").addEventListener("click", resumeGame);
 
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
         if (running) pauseGame();
         else if (!pauseOverlay.classList.contains("hidden")) resumeGame();
       }
 
-      const keyMap = {
-        "1": 0,
-        "2": 1,
-        "3": 2,
-        "4": 3
-      };
-
-      if (keyMap[event.key] !== undefined) {
-        const btn = document.querySelectorAll(".answer-btn")[keyMap[event.key]];
+      const map = { "1": 0, "2": 1, "3": 2, "4": 3 };
+      if (map[e.key] !== undefined) {
+        const btn = document.querySelectorAll(".answer")[map[e.key]];
         if (btn) btn.click();
       }
     });
