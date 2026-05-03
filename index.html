@@ -483,18 +483,54 @@
         border-radius: 18px;
         font-size: clamp(.92rem, 4vw, 1.2rem);
       }
-      /* Mobile-only Start Game upgrade */
-      #startBtn {
-        width: min(100%, 380px);
-        min-height: 72px;
-        padding: 18px 24px;
-        border-radius: 24px;
-        font-size: 1.18rem;
-        box-shadow: 0 18px 44px rgba(37,99,235,.38);
+
+      /* Mobile start screen fix: full-screen overlay so Start Game is never clipped */
+      #startOverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        overflow-y: auto;
+        align-items: center;
+        padding: 18px;
+      }
+
+      #startOverlay .modal {
+        width: min(100%, 620px);
+        max-height: none;
+        padding: 20px;
+      }
+
+      #startOverlay .modal h2 {
+        font-size: clamp(2rem, 10vw, 3.2rem);
+      }
+
+      #startOverlay .modal p {
+        font-size: .98rem;
+        line-height: 1.35;
+        margin-top: 12px;
+      }
+
+      #startOverlay .rules {
+        margin: 14px 0;
+        gap: 8px;
+      }
+
+      #startOverlay .rule {
+        padding: 10px 12px;
+        border-radius: 16px;
+        font-size: .95rem;
       }
 
       #startOverlay .modal-actions {
-        margin-top: 22px;
+        margin-top: 14px;
+      }
+
+      #startBtn {
+        width: 100%;
+        min-height: 64px;
+        padding: 16px 22px;
+        border-radius: 22px;
+        font-size: 1.15rem;
       }
 
     }
