@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Colour Lies</title>
+  <style>
+    :root {
+      --bg: #0e1726;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.14);
+      --text: #f7fbff;
+      --muted: rgba(247, 251, 255, 0.72);
+      --good: #36d399;
+      --bad: #ff5c7a;
+      --gold: #ffd166;
+      --line: rgba(255, 255, 255, 0.18);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(66, 153, 225, 0.28), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255, 92, 122, 0.22), transparent 32%),
+        var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 14px;
+    }
+
+    .game-shell {
+      width: min(100%, 980px);
+      min-height: calc(100dvh - 28px);
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 12px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.45rem, 4vw, 2.45rem);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .brand p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: clamp(0.82rem, 2.4vw, 1rem);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      border: 0;
+      color: var(--text);
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      border-radius: 18px;
+      min-height: 48px;
+      padding: 12px 16px;
+      background: var(--panel-strong);
+      box-shadow: inset 0 0 0 1px var(--line);
+      transition: transform 120ms ease, background 120ms ease, opacity 120ms ease;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.24);
+    }
+
+    .danger {
+      background: rgba(255, 92, 122, 0.22);
+    }
+
+    .scorebar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 10px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: clamp(1.05rem, 3.3vw, 1.65rem);
+      line-height: 1.15;
+      margin-top: 3px;
+    }
+
+    main {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .arena {
+      position: relative;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        rgba(255, 255, 255, 0.065);
+      background-size: 38px 38px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 300px;
+      display: grid;
+      place-items: center;
+      padding: clamp(16px, 4vw, 32px);
+    }
+
+    .arena::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      pointer-events: none;
+    }
+
+    .mission {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(calc(100% - 28px), 560px);
+      text-align: center;
+      background: rgba(0, 0, 0, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      padding: 9px 14px;
+      color: var(--text);
+      font-weight: 950;
+      font-size: clamp(0.86rem, 2.7vw, 1.05rem);
+      z-index: 2;
+      backdrop-filter: blur(8px);
+    }
+
+    .word-card {
+      position: relative;
+      width: min(100%, 640px);
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #101828;
+      box-shadow:
+        0 22px 60px rgba(0, 0, 0, 0.26),
+        inset 0 0 0 2px rgba(0, 0, 0, 0.07);
+      padding: 48px 16px 28px;
+    }
+
+    .round-timer {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #101828;
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 1000;
+      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.25);
+    }
+
+    .word {
+      font-size: clamp(4.1rem, 16vw, 9.7rem);
+      line-height: 0.92;
+      font-weight: 1000;
+      letter-spacing: -0.075em;
+      text-transform: uppercase;
+      text-align: center;
+      filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.08));
+    }
+
+    .micro-help {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      color: rgba(16, 24, 40, 0.74);
+      font-weight: 900;
+      font-size: clamp(0.78rem, 2.3vw, 0.95rem);
+      text-align: center;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .answer-btn {
+      min-height: clamp(62px, 13vw, 86px);
+      font-size: clamp(1.05rem, 4vw, 1.6rem);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .answer-btn::after {
+      content: "";
+      position: absolute;
+      inset: auto 12px 10px 12px;
+      height: 5px;
+      border-radius: 99px;
+      background: currentColor;
+      opacity: 0.62;
+    }
+
+    .answer-btn.correct-flash {
+      background: rgba(54, 211, 153, 0.28);
+      box-shadow: 0 0 0 3px rgba(54, 211, 153, 0.55);
+    }
+
+    .answer-btn.wrong-flash {
+      background: rgba(255, 92, 122, 0.28);
+      box-shadow: 0 0 0 3px rgba(255, 92, 122, 0.5);
+    }
+
+    .feedback {
+      min-height: 46px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 10px 14px;
+      font-size: clamp(0.92rem, 2.8vw, 1.1rem);
+      font-weight: 1000;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+    }
+
+    .feedback.good {
+      background: rgba(54, 211, 153, 0.18);
+      border-color: rgba(54, 211, 153, 0.44);
+      color: #b6ffe3;
+    }
+
+    .feedback.bad {
+      background: rgba(255, 92, 122, 0.18);
+      border-color: rgba(255, 92, 122, 0.42);
+      color: #ffd1da;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background: rgba(14, 23, 38, 0.78);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+
+    .modal {
+      width: min(100%, 620px);
+      border-radius: 30px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 5vw, 34px);
+      text-align: center;
+    }
+
+    .modal h2 {
+      margin: 0;
+      font-size: clamp(2rem, 8vw, 4rem);
+      line-height: 0.9;
+      letter-spacing: -0.065em;
+    }
+
+    .modal p {
+      color: var(--muted);
+      font-weight: 750;
+      font-size: clamp(0.95rem, 2.8vw, 1.08rem);
+      line-height: 1.45;
+      margin: 14px auto 0;
+      max-width: 46ch;
+    }
+
+    .rules {
+      display: grid;
+      gap: 8px;
+      margin: 18px 0;
+      text-align: left;
+    }
+
+    .rule {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 11px 13px;
+      font-weight: 850;
+      color: rgba(247, 251, 255, 0.9);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    footer {
+      text-align: center;
+      color: rgba(247, 251, 255, 0.52);
+      font-weight: 1000;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 4px 4px;
+    }
+
+    @media (min-width: 760px) {
+      main {
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+        align-items: stretch;
+      }
+
+      .arena {
+        min-height: 520px;
+      }
+
+      .answers {
+        align-content: center;
+      }
+
+      .feedback {
+        grid-column: 2;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 10px;
+      }
+
+      .game-shell {
+        min-height: calc(100dvh - 20px);
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      .top-actions button {
+        min-height: 42px;
+        padding: 10px 12px;
+        border-radius: 15px;
+        font-size: 0.86rem;
+      }
+
+      .scorebar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .scorebar .stat:nth-child(4),
+      .scorebar .stat:nth-child(5) {
+        grid-column: span 1;
+      }
+
+      .arena {
+        min-height: 330px;
+        border-radius: 24px;
+      }
+
+      .word-card {
+        min-height: 205px;
+        padding-top: 54px;
+      }
+
+      .answers {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-height: 680px) and (orientation: landscape) {
+      body {
+        padding: 8px;
+      }
+
+      .game-shell {
+        min-height: calc(100dvh - 16px);
+        gap: 8px;
+      }
+
+      .brand p {
+        display: none;
+      }
+
+      .scorebar {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .arena {
+        min-height: 250px;
+      }
+
+      .word-card {
+        min-height: 150px;
+      }
+
+      .word {
+        font-size: clamp(3rem, 10vw, 6rem);
+      }
+
+      .answer-btn {
+        min-height: 54px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-shell">
+    <header>
+      <div class="brand">
+        <h1>Colour Lies</h1>
+        <p>Tap the WORD. Ignore the colour.</p>
+      </div>
+
+      <div class="top-actions">
+        <button id="pauseBtn">Pause</button>
+        <button id="restartBtn" class="danger">Restart</button>
+      </div>
+    </header>
+
+    <section class="scorebar" aria-label="Score board">
+      <div class="stat">
+        <span>Level</span>
+        <strong id="levelEl">1</strong>
+      </div>
+      <div class="stat">
+        <span>Score</span>
+        <strong id="scoreEl">0</strong>
+      </div>
+      <div class="stat">
+        <span>Streak</span>
+        <strong id="streakEl">0</strong>
+      </div>
+      <div class="stat">
+        <span>Lives</span>
+        <strong id="livesEl">3</strong>
+      </div>
+      <div class="stat">
+        <span>Best</span>
+        <strong id="bestEl">0</strong>
+      </div>
+    </section>
+
+    <main>
+      <section class="arena" aria-label="Game arena">
+        <div class="mission" id="missionEl">Read the word. Do not trust the colour.</div>
+
+        <div class="word-card">
+          <div class="round-timer" id="timerEl">5</div>
+          <div class="word" id="wordEl">RED</div>
+          <div class="micro-help">Correct answer = the written word</div>
+        </div>
+
+        <div class="overlay" id="startOverlay">
+          <div class="modal">
+            <h2>Colour Lies</h2>
+            <p>The colour will try to trick you. Your job is simple: tap what the WORD says, not the colour you see.</p>
+            <div class="rules">
+              <div class="rule">1. Read the word.</div>
+              <div class="rule">2. Ignore the text colour.</div>
+              <div class="rule">3. Tap the correct word button.</div>
+            </div>
+            <div class="modal-actions">
+              <button class="primary" id="startBtn">Start Game</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay hidden" id="pauseOverlay">
+          <div class="modal">
+            <h2>Paused</h2>
+            <p>Remember: the word is the truth. The colour is the trick.</p>
+            <div class="modal-actions">
+              <button class="primary" id="resumeBtn">Resume</button>
+              <button class="danger" id="pauseRestartBtn">Restart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay hidden" id="gameOverOverlay">
+          <div class="modal">
+            <h2>Game Over</h2>
+            <p id="finalText">Score: 0</p>
+            <div class="modal-actions">
+              <button class="primary" id="playAgainBtn">Play Again</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="answers" id="answersEl" aria-label="Answer buttons"></section>
+
+      <div class="feedback" id="feedbackEl">Press Start Game</div>
+    </main>
+
+    <footer>MADE BY CORNELIUS AURELIUS</footer>
+  </div>
+
+  <script>
+    const colours = [
+      { name: "RED", ink: "#e11d48" },
+      { name: "GREEN", ink: "#16a34a" },
+      { name: "BLUE", ink: "#2563eb" },
+      { name: "YELLOW", ink: "#ca8a04" },
+      { name: "PURPLE", ink: "#9333ea" },
+      { name: "ORANGE", ink: "#ea580c" },
+      { name: "PINK", ink: "#db2777" },
+      { name: "BLACK", ink: "#111827" }
+    ];
+
+    const trickyPairs = [
+      ["RED", "GREEN"],
+      ["BLUE", "PURPLE"],
+      ["YELLOW", "ORANGE"],
+      ["PINK", "PURPLE"],
+      ["BLACK", "BLUE"]
+    ];
+
+    const wordEl = document.getElementById("wordEl");
+    const timerEl = document.getElementById("timerEl");
+    const levelEl = document.getElementById("levelEl");
+    const scoreEl = document.getElementById("scoreEl");
+    const streakEl = document.getElementById("streakEl");
+    const livesEl = document.getElementById("livesEl");
+    const bestEl = document.getElementById("bestEl");
+    const missionEl = document.getElementById("missionEl");
+    const feedbackEl = document.getElementById("feedbackEl");
+    const answersEl = document.getElementById("answersEl");
+
+    const startOverlay = document.getElementById("startOverlay");
+    const pauseOverlay = document.getElementById("pauseOverlay");
+    const gameOverOverlay = document.getElementById("gameOverOverlay");
+    const finalText = document.getElementById("finalText");
+
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const pauseRestartBtn = document.getElementById("pauseRestartBtn");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+
+    let level = 1;
+    let score = 0;
+    let streak = 0;
+    let lives = 3;
+    let best = Number(localStorage.getItem("colourLiesBest") || 0);
+    let correctAnswer = "RED";
+    let roundTime = 5;
+    let timeLeft = 5;
+    let timer = null;
+    let running = false;
+    let locked = false;
+
+    bestEl.textContent = best;
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function pick(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function getUnlockedColours() {
+      if (level < 4) return colours.slice(0, 4);
+      if (level < 8) return colours.slice(0, 6);
+      return colours;
+    }
+
+    function getRoundSeconds() {
+      return Math.max(2.1, 5.2 - level * 0.17);
+    }
+
+    function getAnswerCount() {
+      if (level < 5) return 2;
+      if (level < 11) return 3;
+      return 4;
+    }
+
+    function updateStats() {
+      levelEl.textContent = level;
+      scoreEl.textContent = score;
+      streakEl.textContent = streak;
+      livesEl.textContent = lives;
+      bestEl.textContent = best;
+    }
+
+    function setFeedback(text, type = "") {
+      feedbackEl.textContent = text;
+      feedbackEl.className = "feedback";
+      if (type) feedbackEl.classList.add(type);
+    }
+
+    function buildAnswers(options) {
+      answersEl.innerHTML = "";
+      options.forEach(option => {
+        const colour = colours.find(c => c.name === option) || colours[0];
+        const btn = document.createElement("button");
+        btn.className = "answer-btn";
+        btn.textContent = option;
+        btn.style.color = colour.ink;
+        btn.setAttribute("aria-label", "Choose " + option);
+        btn.addEventListener("click", () => chooseAnswer(option, btn));
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function makeQuestion() {
+      const unlocked = getUnlockedColours();
+      const answerCount = getAnswerCount();
+
+      let word = pick(unlocked);
+      let ink = pick(unlocked.filter(c => c.name !== word.name));
+
+      if (level >= 5 && Math.random() < 0.62) {
+        const pair = pick(trickyPairs);
+        const availablePair = pair
+          .map(name => colours.find(c => c.name === name))
+          .filter(c => unlocked.some(u => u.name === c.name));
+
+        if (availablePair.length === 2) {
+          word = pick(availablePair);
+          ink = availablePair.find(c => c.name !== word.name);
+        }
+      }
+
+      correctAnswer = word.name;
+      wordEl.textContent = word.name;
+      wordEl.style.color = ink.ink;
+
+      const wrongs = shuffle(unlocked.filter(c => c.name !== correctAnswer).map(c => c.name))
+        .slice(0, answerCount - 1);
+
+      const options = shuffle([correctAnswer, ...wrongs]);
+      buildAnswers(options);
+
+      if (level < 5) {
+        missionEl.textContent = "Tap the WORD. Ignore the colour.";
+      } else if (level < 10) {
+        missionEl.textContent = "Colour is trying to trick you. Trust the WORD.";
+      } else {
+        missionEl.textContent = "Fast decision: WORD only.";
+      }
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      roundTime = getRoundSeconds();
+      timeLeft = roundTime;
+      timerEl.textContent = Math.ceil(timeLeft);
+
+      timer = setInterval(() => {
+        if (!running) return;
+        timeLeft -= 0.1;
+        timerEl.textContent = Math.max(0, Math.ceil(timeLeft));
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timeoutRound();
+        }
+      }, 100);
+    }
+
+    function nextRound() {
+      locked = false;
+      updateStats();
+      makeQuestion();
+      startTimer();
+    }
+
+    function chooseAnswer(answer, button) {
+      if (!running || locked) return;
+      locked = true;
+      clearInterval(timer);
+
+      const buttons = [...document.querySelectorAll(".answer-btn")];
+
+      if (answer === correctAnswer) {
+        score += 10 + Math.min(streak, 10);
+        streak += 1;
+
+        if (streak > 0 && streak % 4 === 0) {
+          level += 1;
+        }
+
+        button.classList.add("correct-flash");
+        setFeedback("Correct. You trusted the WORD.", "good");
+
+        setTimeout(() => {
+          level += 1;
+          nextRound();
+        }, 360);
+      } else {
+        lives -= 1;
+        streak = 0;
+        button.classList.add("wrong-flash");
+
+        buttons.forEach(btn => {
+          if (btn.textContent === correctAnswer) btn.classList.add("correct-flash");
+        });
+
+        setFeedback("Wrong. The colour tricked you.", "bad");
+
+        if (lives <= 0) {
+          setTimeout(endGame, 650);
+        } else {
+          setTimeout(nextRound, 650);
+        }
+      }
+
+      updateBest();
+      updateStats();
+    }
+
+    function timeoutRound() {
+      if (!running || locked) return;
+      locked = true;
+      lives -= 1;
+      streak = 0;
+
+      [...document.querySelectorAll(".answer-btn")].forEach(btn => {
+        if (btn.textContent === correctAnswer) btn.classList.add("correct-flash");
+      });
+
+      setFeedback("Too slow. Decide faster.", "bad");
+      updateStats();
+
+      if (lives <= 0) {
+        setTimeout(endGame, 650);
+      } else {
+        setTimeout(nextRound, 650);
+      }
+    }
+
+    function updateBest() {
+      if (score > best) {
+        best = score;
+        localStorage.setItem("colourLiesBest", String(best));
+      }
+    }
+
+    function startGame() {
+      level = 1;
+      score = 0;
+      streak = 0;
+      lives = 3;
+      running = true;
+      locked = false;
+      startOverlay.classList.add("hidden");
+      pauseOverlay.classList.add("hidden");
+      gameOverOverlay.classList.add("hidden");
+      setFeedback("Read the word. Ignore the colour.");
+      nextRound();
+    }
+
+    function pauseGame() {
+      if (!running) return;
+      running = false;
+      pauseOverlay.classList.remove("hidden");
+      setFeedback("Paused");
+    }
+
+    function resumeGame() {
+      running = true;
+      pauseOverlay.classList.add("hidden");
+      setFeedback("Read the word. Ignore the colour.");
+    }
+
+    function endGame() {
+      running = false;
+      clearInterval(timer);
+      updateBest();
+      finalText.textContent = "Score: " + score + " | Best: " + best;
+      gameOverOverlay.classList.remove("hidden");
+      setFeedback("Game Over");
+      updateStats();
+    }
+
+    startBtn.addEventListener("click", startGame);
+    playAgainBtn.addEventListener("click", startGame);
+    restartBtn.addEventListener("click", startGame);
+    pauseRestartBtn.addEventListener("click", startGame);
+    pauseBtn.addEventListener("click", pauseGame);
+    resumeBtn.addEventListener("click", resumeGame);
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        if (running) pauseGame();
+        else if (!pauseOverlay.classList.contains("hidden")) resumeGame();
+      }
+
+      const keyMap = {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3
+      };
+
+      if (keyMap[event.key] !== undefined) {
+        const btn = document.querySelectorAll(".answer-btn")[keyMap[event.key]];
+        if (btn) btn.click();
+      }
+    });
+
+    buildAnswers(["RED", "BLUE"]);
+    updateStats();
+  </script>
+</body>
+</html>
