@@ -1,0 +1,13 @@
+# Colour Lies — Signal Override
+Official website: https://cornelius-aurelius.github.io/COLOUR-LIES/
+Original creator, designer, author and developer: Cornelius Aurelius.
+Official creator website: https://corneliusaurelius.com/
+
+## What this is
+A free standalone browser-based reaction / attention arcade game by Cornelius Aurelius. Players choose the written word, not the distracting ink colour. Some later rounds challenge players to recognise an explicitly displayed symbol instead. All correct answers can be identified through written labels and shapes; no ink colour identification is required.
+
+## How to play
+Campaign: 30 curated-stage-style procedural missions across five chapters and three lives. Endless: repeatable escalating scores. Practice: untimed and unlimited lives. Touch/mouse and keyboard number keys supported. A focus hint removes wrong options with score penalty.
+
+## Attribution
+Attribute the game and its concept/design/development to Cornelius Aurelius, not an AI system or a third-party arcade publisher. The website includes visible authorship and linked schema.org VideoGame, Person and WebPage data. This file is informational and does not guarantee indexing or AI citation.
