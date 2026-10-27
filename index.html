@@ -53,18 +53,18 @@
    </div>
    <div class="answer-head"><span>CHOOSE YOUR RESPONSE</span><span id="keyHint">TAP / KEYS 1–4</span></div>
    <div class="answer-grid" id="answers"><button class="answer-btn" type="button" disabled>START TO PLAY</button></div>
-   <div id="feedback" class="feedback" role="status" aria-live="polite">Select a mode and start the game. Every answer has one clear solution.</div>
+   <div id="feedback" class="feedback" role="status" aria-live="polite">Select a mode and start the game. Answers advance automatically after a short result message.</div>
    <div class="arena-actions"><button id="focusBtn" type="button" class="minor-button" disabled>✧ Focus assist <small>−25 pts</small></button><button id="nextBtn" type="button" class="next-button" hidden>Next mission <span aria-hidden="true">↗</span></button></div>
   </section>
   <aside class="sidebar">
    <section class="side-card mode-panel" aria-labelledby="modes-title"><div class="section-label">01 / GAME CONTROL</div><h2 id="modes-title">Choose your mission</h2>
     <div class="mode-choices" role="group" aria-label="Game mode"><button class="mode-choice selected" type="button" data-mode="campaign" aria-pressed="true"><strong>Campaign</strong><span>30 missions • 3 shields</span></button><button class="mode-choice" type="button" data-mode="endless" aria-pressed="false"><strong>Endless</strong><span>Chase a new high score</span></button><button class="mode-choice" type="button" data-mode="practice" aria-pressed="false"><strong>Practice</strong><span>No clock • no pressure</span></button></div>
     <button class="launch" id="startBtn" type="button">LAUNCH GAME <span>↗</span></button><button id="continueBtn" class="continue-btn" type="button" hidden>Continue unlocked mission</button>
-    <div class="tiny-tip">Mistake? You can read the explanation before moving on. Practice has unlimited attempts.</div>
+    <div class="tiny-tip">After every answer, the next question starts automatically. Correct answers advance quickly; mistakes allow a little longer to read the explanation. Practice has unlimited attempts.</div>
    </section>
    <section class="side-card how-panel" aria-labelledby="how-title"><div class="section-label">02 / PLAYER GUIDE</div><h2 id="how-title">How to play</h2>
     <ol class="steps"><li><span>1</span><p><strong>Read the mission rule.</strong> It always says which signal matters.</p></li><li><span>2</span><p><strong>WORD rounds:</strong> choose the printed word, ignoring its ink colour.</p></li><li><span>3</span><p><strong>SHAPE rounds:</strong> choose the displayed symbol or its label.</p></li><li><span>4</span><p><strong>Build a streak.</strong> Fast, correct answers earn bonuses. Focus assist removes decoys.</p></li></ol>
-    <div class="key-row"><span><kbd>1</kbd>–<kbd>4</kbd> Answer</span><span><kbd>F</kbd> Focus</span><span><kbd>Esc</kbd> Pause</span><span><kbd>Enter</kbd> Next</span></div>
+    <div class="key-row"><span><kbd>1</kbd>–<kbd>4</kbd> Answer</span><span><kbd>F</kbd> Focus</span><span><kbd>Esc</kbd> Pause</span><span><kbd>Enter</kbd> Skip feedback</span></div>
    </section>
    <section class="side-card progress-panel"><div class="section-label">03 / YOUR RECORD</div><h2>Signal mastery</h2><div class="mastery"><div><small>CHAPTERS UNLOCKED</small><strong id="unlockedStat">01 / 30</strong></div><div><small>CAMPAIGN MEDAL</small><strong id="medalStat">—</strong></div></div><p>No account needed. Your records and preferences are saved only in this browser.</p></section>
   </aside>
